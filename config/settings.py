@@ -46,6 +46,11 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 # ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = [
+    'https://matelab.up.railway.app',
+]
+
 # Current DJANGO_ENVIRONMENT
 ENVIRONMENT = os.environ.get("ENVIRONMENT", default="local")
 
@@ -60,9 +65,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "apps.dashboards",
-    "apps.layouts", 
+    "apps.layouts",
     'apps.authentication',
-    'apps.misiones', 
+    'apps.misiones',
     'apps.biblioteca',
 ]
 
