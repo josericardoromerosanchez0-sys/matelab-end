@@ -38,7 +38,8 @@ if not SECRET_KEY:
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ and 'RAILWAY_ENVIRONMENT' not in os.environ
+IS_RAILWAY = 'RAILWAY_ENVIRONMENT_NAME' in os.environ or 'RAILWAY_PUBLIC_DOMAIN' in os.environ
+DEBUG = 'RENDER' not in os.environ and not IS_RAILWAY
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
