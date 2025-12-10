@@ -34,6 +34,7 @@ COPY . .
 # Variables por defecto dentro del contenedor
 ENV DJANGO_SETTINGS_MODULE=config.settings
 ENV PORT=8000
+ENV DEBUG=False
 
 # --------- Collectstatic (usa tus settings de STATIC_ROOT) ---------
 RUN RENDER=true python manage.py collectstatic --noinput
