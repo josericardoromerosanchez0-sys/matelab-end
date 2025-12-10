@@ -1,0 +1,323 @@
+{% extends 'layout/master.html' %}
+<!-- BLoque de title -->
+{% block title %}Mapa de Progreso{% endblock %}
+<!-- BLoque de layout -->
+{% block layout %}
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    {% include 'layout/partials/menu/vertical/student_menu.html' %}
+    <div class="layout-page">
+      {% include 'layout/partials/navbar/navbar.html' %}
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h2 class="fw-bold mb-1">
+                <i class="ti ti-map-2 me-2"></i>Mapa de Progreso
+              </h2>
+              <p class="text-muted mb-0">
+                Visualiza tu camino de aprendizaje y mantén el control de tus
+                logros
+              </p>
+            </div>
+          </div>
+
+          <!-- Progress Summary Card -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card shadow-sm">
+                <div class="card-body p-4">
+                  <div class="row align-items-center">
+                    <div class="col-md-8">
+                      <div class="d-flex align-items-center mb-3">
+                        <div class="avatar avatar-lg me-3">
+                          <span class="avatar-initial bg-label-primary rounded">
+                            <i class="ti ti-chart-pie-2 fs-3"></i>
+                          </span>
+                        </div>
+                        <div>
+                          <h4 class="mb-1 fw-bold">Progreso General</h4>
+                          <p class="text-muted mb-0">
+                            <span class="fw-semibold text-primary"
+                              >{{ misiones_completadas }}</span
+                            >
+                            de
+                            <span class="fw-semibold"
+                              >{{ total_misiones }}</span
+                            >
+                            misiones completadas
+                          </p>
+                        </div>
+                      </div>
+                      <div class="progress mb-2" style="height: 12px">
+                        <div
+                          class="progress-bar bg-primary"
+                          role="progressbar"
+                          style="width: {{ porcentaje_total }}%"
+                          aria-valuenow="{{ porcentaje_total }}"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        ></div>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <small class="text-muted">Iniciando tu camino</small>
+                        <small class="fw-semibold text-primary"
+                          >{{ porcentaje_total }}% Completado</small
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                      <div class="mt-3 mt-md-0">
+                        <h1 class="display-4 fw-bold text-primary mb-0">
+                          {{ porcentaje_total }}%
+                        </h1>
+                        <p class="text-muted mb-2">de progreso</p>
+                        {% if porcentaje_total < 30 %}
+                        <span class="badge bg-label-info">
+                          <i class="ti ti-rocket me-1"></i>Comenzando
+                        </span>
+                        {% elif porcentaje_total < 70 %}
+                        <span class="badge bg-label-warning">
+                          <i class="ti ti-flame me-1"></i>En Progreso
+                        </span>
+                        {% else %}
+                        <span class="badge bg-label-success">
+                          <i class="ti ti-trophy me-1"></i>Casi Experto
+                        </span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills Progress -->
+          {% for progreso in progreso_habilidades %}
+          <div class="card mb-4 shadow-sm">
+            <div
+              class="card-header d-flex justify-content-between align-items-center py-3"
+            >
+              <div class="d-flex align-items-center">
+                <div class="avatar me-3">
+                  <span
+                    class="avatar-initial {% if progreso.porcentaje_completado == 100 %}bg-success{% else %}bg-primary{% endif %} rounded"
+                  >
+                    <i
+                      class="ti ti-{% if progreso.porcentaje_completado == 100 %}certificate{% else %}target{% endif %}"
+                    ></i>
+                  </span>
+                </div>
+                <div>
+                  <h5 class="mb-0">{{ progreso.habilidad.nombre }}</h5>
+                  <small class="text-muted"
+                    >{{ progreso.misiones|length }} misiones disponibles</small
+                  >
+                </div>
+              </div>
+              <div class="text-end">
+                <span
+                  class="badge {% if progreso.porcentaje_completado == 100 %}bg-success{% else %}bg-primary{% endif %} fs-6 px-3 py-2"
+                >
+                  <i class="ti ti-percentage me-1"></i>{{ progreso.porcentaje_completado }}%
+                </span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="mb-4">
+                <div class="d-flex justify-content-between mb-2">
+                  <small class="text-muted fw-semibold"
+                    >Progreso de habilidad</small
+                  >
+                  <small
+                    class="fw-semibold {% if progreso.porcentaje_completado == 100 %}text-success{% else %}text-primary{% endif %}"
+                  >
+                    {{ progreso.porcentaje_completado }}%
+                  </small>
+                </div>
+                <div class="progress" style="height: 8px">
+                  <div
+                    class="progress-bar {% if progreso.porcentaje_completado == 100 %}bg-success{% else %}bg-primary{% endif %}"
+                    role="progressbar"
+                    style="width: {{ progreso.porcentaje_completado }}%"
+                    aria-valuenow="{{ progreso.porcentaje_completado }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="row g-3">
+                {% for mision in progreso.misiones %}
+                <div class="col-md-6 col-lg-4">
+                  <div
+                    class="card h-100 {% if mision.esta_completada %}border-success{% else %}border{% endif %} shadow-sm"
+                  >
+                    <div class="card-body">
+                      <div
+                        class="d-flex justify-content-between align-items-start mb-3"
+                      >
+                        <div class="avatar me-2">
+                          <span
+                            class="avatar-initial {% if mision.esta_completada %}bg-success{% else %}bg-label-secondary{% endif %} rounded"
+                          >
+                            <i
+                              class="ti ti-{% if mision.esta_completada %}circle-check{% else %}lock{% endif %} fs-5"
+                            ></i>
+                          </span>
+                        </div>
+                        <span
+                          class="badge {% if mision.esta_completada %}bg-success{% else %}bg-secondary{% endif %} px-2"
+                        >
+                          {% if mision.esta_completada %}
+                          <i class="ti ti-check me-1"></i>Completado
+                          {% else %}
+                          <i class="ti ti-lock me-1"></i>Pendiente
+                          {% endif %}
+                        </span>
+                      </div>
+                      <h6 class="mb-2 fw-semibold">{{ mision.titulo }}</h6>
+                      {% if mision.descripcion %}
+                      <p class="text-muted small mb-0" style="line-height: 1.5">
+                        {{ mision.descripcion|truncatechars:100 }}
+                      </p>
+                      {% endif %}
+                      {% if mision.esta_completada %}
+                      <div class="mt-3">
+                        <small class="text-success fw-semibold">
+                          <i class="ti ti-trophy me-1"></i>¡Misión completada!
+                        </small>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <!-- All Missions Section -->
+          <div class="card shadow-sm">
+            <div
+              class="card-header d-flex justify-content-between align-items-center py-3"
+            >
+              <div class="d-flex align-items-center">
+                <div class="avatar me-3">
+                  <span class="avatar-initial bg-label-primary rounded">
+                    <i class="ti ti-list-check"></i>
+                  </span>
+                </div>
+                <div>
+                  <h5 class="mb-0">Todas tus Misiones</h5>
+                  <small class="text-muted"
+                    >Vista completa de tu progreso</small
+                  >
+                </div>
+              </div>
+              <span class="badge bg-label-primary fs-6 px-3 py-2">
+                <i class="ti ti-stack me-1"></i>{{ misiones|length }} total
+              </span>
+            </div>
+            <div class="card-body p-4">
+              <div class="row g-4">
+                {% for mision in misiones %}
+                <div class="col-md-6 col-lg-4">
+                  <div
+                    class="card h-100 shadow-sm {% if mision.estado == 'completado' %}border-success{% elif mision.estado == 'rechazado' %}border-danger{% elif mision.estado == 'en_progreso' %}border-primary{% else %}border{% endif %}"
+                  >
+                    <div class="card-body p-4">
+                      <div
+                        class="d-flex justify-content-between align-items-start mb-3"
+                      >
+                        <div class="avatar avatar-lg me-3">
+                          <span
+                            class="avatar-initial {% if mision.estado == 'completado' %}bg-success{% elif mision.estado == 'rechazado' %}bg-danger{% elif mision.estado == 'en_progreso' %}bg-primary{% else %}bg-label-secondary{% endif %} rounded"
+                          >
+                            <i
+                              class="ti ti-{% if mision.estado == 'completado' %}circle-check{% elif mision.estado == 'rechazado' %}alert-circle{% elif mision.estado == 'en_progreso' %}clock-hour-3{% else %}circle-dashed{% endif %} fs-4"
+                            ></i>
+                          </span>
+                        </div>
+                        <span
+                          class="badge bg-{% if mision.estado == 'completado' %}success{% elif mision.estado == 'rechazado' %}danger{% elif mision.estado == 'en_progreso' %}primary{% else %}secondary{% endif %} px-3 py-2"
+                        >
+                          {% if mision.estado == 'completado' %}
+                          <i class="ti ti-check me-1"></i>Completado
+                          {% elif mision.estado == 'en_progreso' %}
+                          <i class="ti ti-loader me-1"></i>En progreso
+                          {% elif mision.estado == 'rechazado' %}
+                          <i class="ti ti-x me-1"></i>Rechazado
+                          {% else %}
+                          <i class="ti ti-circle me-1"></i>No iniciada
+                          {% endif %}
+                        </span>
+                      </div>
+
+                      <h6 class="mb-2 fw-semibold">{{ mision.titulo }}</h6>
+
+                      {% if mision.descripcion %}
+                      <p class="text-muted small mb-3" style="line-height: 1.5">
+                        {{ mision.descripcion|truncatechars:100 }}
+                      </p>
+                      {% endif %}
+                      {% if mision.ultimo_intento %}
+                      <div class="d-flex align-items-center mb-2">
+                        <i class="ti ti-calendar-event me-2 text-muted"></i>
+                        <small class="text-muted">
+                          Último intento:
+                          <span class="fw-semibold"
+                            >{{ mision.ultimo_intento.fecha_intento|date:"d/m/Y H:i"|default:"N/A" }}</span
+                          >
+                        </small>
+                      </div>
+                      {% endif %}
+                      {% if mision.estado == 'en_progreso' and mision.ultimo_intento %}
+                      <div class="mt-3">
+                        <div class="d-flex justify-content-between mb-1">
+                          <small class="text-muted">Progreso</small>
+                          <small class="fw-semibold text-primary">
+                            {{ mision.ultimo_intento.porcentaje_completado|default:0 }}%
+                          </small>
+                        </div>
+                        <div class="progress" style="height: 6px">
+                          <div
+                            class="progress-bar bg-primary"
+                            role="progressbar"
+                            style="width: {{ mision.ultimo_intento.porcentaje_completado|default:0 }}%"
+                            aria-valuenow="{{ mision.ultimo_intento.porcentaje_completado|default:0 }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% if mision.estado == 'completado' %}
+                      <div class="mt-3 text-center">
+                        <small class="text-success fw-semibold">
+                          <i class="ti ti-trophy me-1"></i>¡Misión completada con éxito!
+                        </small>
+                      </div>
+                      {% elif mision.estado == 'rechazado' %}
+                      <div class="mt-3 text-center">
+                        <small class="text-danger fw-semibold">
+                          <i class="ti ti-info-circle me-1"></i>Revisa y vuelve a intentar
+                        </small>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
